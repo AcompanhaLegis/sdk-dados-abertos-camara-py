@@ -1,0 +1,6 @@
+*.sw*
+venv/
+*__pycache__*
+sdk_dados_abertos_camara.egg-info/
+dist/
+build/
