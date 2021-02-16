@@ -1,6 +1,6 @@
 import requests
 
-from exceptions import CamaraAPIException
+from sdk_dados_abertos_camara.exceptions import CamaraAPIException
 
 BASE_URL = 'https://dadosabertos.camara.leg.br/api/v2/'
 HEADERS = {
