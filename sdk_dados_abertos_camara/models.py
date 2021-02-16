@@ -13,7 +13,7 @@ class Model(object):
     def __init__(self, data):
         self.data = data
 
-    def get_date(date_str, fmt=DATETIME_FORMAT):
+    def get_date(self, date_str, fmt=DATETIME_FORMAT):
         """
         Since the data comes from the API, we shouldn't validate it,
         so if there's no data (TypeError when None) or it is empty (ValueError)
