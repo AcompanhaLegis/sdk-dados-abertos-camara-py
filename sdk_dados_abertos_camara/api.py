@@ -21,11 +21,11 @@ def get_one(endpoint, data_only=True):
 
 
 def get(endpoint,
+        extra_params={},
         order=None,
         orderBy=None,
         page=1,
         itens=20,
-        extra_params={},
         data_only=True):
     """
     Get a list of entities from an endpoint, e.g. /deputados
