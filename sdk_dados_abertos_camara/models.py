@@ -81,6 +81,56 @@ class Deputado(Model):
         return self.nome
 
 
+class DespesaDeputado(Model):
+    """
+    {
+      "ano": 0,
+      "cnpjCpfFornecedor": "string",
+      "codDocumento": 0,
+      "codLote": 0,
+      "codTipoDocumento": 0,
+      "dataDocumento": "string",
+      "mes": 0,
+      "nomeFornecedor": "string",
+      "numDocumento": "string",
+      "numRessarcimento": "string",
+      "parcela": 0,
+      "tipoDespesa": "string",
+      "tipoDocumento": "string",
+      "urlDocumento": "string",
+      "valorDocumento": 0,
+      "valorGlosa": 0,
+      "valorLiquido": 0
+    }
+    """
+
+    def __init__(self, data):
+        super().__init__(data)
+        self.ano = data['ano']
+        self.cnpj_cpf_fornecedor = data['cnpjCpfFornecedor']
+        self.cod_document = data['codDocumento']
+        self.cod_lote = data['codLote']
+        self.cod_tipo_documento = data['codTipoDocumento']
+        self.data_documento = self.get_date(data['dataDocumento'], DATE_FORMAT)
+        self.mes = data['mes']
+        self.nome_fornecedor = data['nomeFornecedor']
+        self.num_documento = data['numDocumento']
+        self.num_ressarcimento = data['numRessarcimento']
+        self.parcela = data['parcela']
+        self.tipo_despesa = data['tipoDespesa']
+        self.tipo_documento = data['tipoDocumento']
+        self.url_documento = data['urlDocumento']
+        self.valor_documento = data['valorDocumento']
+        self.valor_glosa = data['valorGlosa']
+        self.valor_liquido = data['valorLiquido']
+
+    def __str__(self):
+        return 'Despesa em {} dia {} valor: R$ {}'.format(
+            self.nome_fornecedor,
+            self.data['dataDocumento'],
+            self.valor_liquido)
+
+
 class LocalCamara(Model):
     """
     This model represents a location inside the Camara dos Deputados building,
@@ -123,14 +173,14 @@ class Orgao(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.apelido = self.data['apelido']
-        self.cod_tipo_orgao = self.data['codTipoOrgao']
-        self.id = self.data['id']
-        self.nome = self.data['nome']
-        self.nome_publicacao = self.data['nomePublicacao']
-        self.sigla = self.data['sigla']
-        self.tipo_orgao = self.data['tipoOrgao']
-        self.uri = self.data['uri']
+        self.apelido = data['apelido']
+        self.cod_tipo_orgao = data['codTipoOrgao']
+        self.id = data['id']
+        self.nome = data['nome']
+        self.nome_publicacao = data['nomePublicacao']
+        self.sigla = data['sigla']
+        self.tipo_orgao = data['tipoOrgao']
+        self.uri = data['uri']
 
     def __str__(self):
         return self.nome
@@ -171,17 +221,17 @@ class Evento(Model):
 
     def __init__(self, data):
         self.data = data
-        self.data_hora_fim = self.get_date(self.data['dataHoraFim'])
-        self.data_hora_inicio = self.get_date(self.data['dataHoraInicio'])
-        self.descricao = self.data['descricao']
-        self.descricao_tipo = self.data['descricaoTipo']
-        self.id = self.data['id']
-        self.local_camara = LocalCamara(self.data['localCamara'])
-        self.local_externo = self.data['localExterno']
-        self.orgaos = [Orgao(o) for o in self.data['orgaos']]
-        self.situacao = self.data['situacao']
-        self.uri = self.data['uri']
-        self.url_registro = self.data['urlRegistro']
+        self.data_hora_fim = self.get_date(data['dataHoraFim'])
+        self.data_hora_inicio = self.get_date(data['dataHoraInicio'])
+        self.descricao = data['descricao']
+        self.descricao_tipo = data['descricaoTipo']
+        self.id = data['id']
+        self.local_camara = LocalCamara(data['localCamara'])
+        self.local_externo = data['localExterno']
+        self.orgaos = [Orgao(o) for o in data['orgaos']]
+        self.situacao = data['situacao']
+        self.uri = data['uri']
+        self.url_registro = data['urlRegistro']
 
     def __str__(self):
         return self.nome
@@ -199,10 +249,10 @@ class Frente(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.id = self.data['id']
-        self.id_legislatura = self.data['idLegislatura']
-        self.titulo = self.data['titulo']
-        self.uri = self.data['uri']
+        self.id = data['id']
+        self.id_legislatura = data['idLegislatura']
+        self.titulo = data['titulo']
+        self.uri = data['uri']
 
     def __str__(self):
         return self.titulo
@@ -221,11 +271,11 @@ class Legislatura(Model):
     def __init__(self, data):
         super().__init__(data)
         self.data_fim = self.get_date(
-            self.data.get('dataFim', None), DATE_FORMAT)
+            data.get('dataFim', None), DATE_FORMAT)
         self.data_inicio = self.get_date(
-            self.data.get('dataInicio', None), DATE_FORMAT)
-        self.id = self.data['id']
-        self.uri = self.data['uri']
+            data.get('dataInicio', None), DATE_FORMAT)
+        self.id = data['id']
+        self.uri = data['uri']
 
     def __str__(self):
         return 'Legislatura ID: {}'.format(self.id)
@@ -243,10 +293,10 @@ class Partido(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.id = self.data['id']
-        self.nome = self.data['nome']
-        self.sigla = self.data['sigla']
-        self.uri = self.data['uri']
+        self.id = data['id']
+        self.nome = data['nome']
+        self.sigla = data['sigla']
+        self.uri = data['uri']
 
     def __str__(self):
         return self.sigla
@@ -275,17 +325,17 @@ class StatusProposicao(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.data_hora = self.get_date(self.data['dataHora'], DATE_FORMAT)
-        self.sequencia = self.data['sequencia']
-        self.sigla_orgao = self.data['siglaOrgao']
-        self.uri_orgao = self.data['uriOrgao']
-        self.regime = self.data['regime']
-        self.descricao_tramitacao = self.data['descricaoTramitacao']
-        self.cod_tipo_tramitacao = self.data['codTipoTramitacao']
-        self.cod_situacao = self.data['codSituacao']
-        self.despacho = self.data['despacho']
-        self.url = self.data['url']
-        self.ambito = self.data['ambito']
+        self.data_hora = self.get_date(data['dataHora'], DATE_FORMAT)
+        self.sequencia = data['sequencia']
+        self.sigla_orgao = data['siglaOrgao']
+        self.uri_orgao = data['uriOrgao']
+        self.regime = data['regime']
+        self.descricao_tramitacao = data['descricaoTramitacao']
+        self.cod_tipo_tramitacao = data['codTipoTramitacao']
+        self.cod_situacao = data['codSituacao']
+        self.despacho = data['despacho']
+        self.url = data['url']
+        self.ambito = data['ambito']
 
     def __str__(self):
         return self.nome
@@ -347,30 +397,30 @@ class Proposicao(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.id = self.data['id']
-        self.uri = self.data['uri']
-        self.sigla_tipo = self.data['siglaTipo']
-        self.cod_tipo = self.data['codTipo']
-        self.numero = self.data['numero']
-        self.ano = self.data['ano']
-        self.ementa = self.data['ementa']
+        self.id = data['id']
+        self.uri = data['uri']
+        self.sigla_tipo = data['siglaTipo']
+        self.cod_tipo = data['codTipo']
+        self.numero = data['numero']
+        self.ano = data['ano']
+        self.ementa = data['ementa']
         self.data_apresentacao = self.get_date(
-            self.data.get('dataApresentacao'))
-        self.uri_orgao_numerador = self.data.get('uriOrgaoNumerador', None)
+            data.get('dataApresentacao'))
+        self.uri_orgao_numerador = data.get('uriOrgaoNumerador', None)
         self.status_proposicao = StatusProposicao(
-            self.data['statusProposicao']
-        ) if self.data.get("statusProposicao", None) else None
-        self.uri_autores = self.data.get("uriAutores", None)
-        self.descricao_tipo = self.data.get("descricaoTipo", None)
-        self.ementa_detalhada = self.data.get("ementaDetalhada", None)
-        self.keywords = self.data.get("keywords", '').split(',')
-        self.uri_prop_principal = self.data.get("uriPropPrincipal", None)
-        self.uri_prop_anterior = self.data.get("uriPropAnterior", None)
-        self.uri_prop_posterior = self.data.get("uriPropPosterior", None)
-        self.url_inteiro_teor = self.data.get("urlInteiroTeor", None)
-        self.urn_final = self.data.get("urnFinal", None)
-        self.texto = self.data.get("texto", None)
-        self.justificativa = self.data.get("justificativa", None)
+            data['statusProposicao']
+        ) if data.get("statusProposicao", None) else None
+        self.uri_autores = data.get("uriAutores", None)
+        self.descricao_tipo = data.get("descricaoTipo", None)
+        self.ementa_detalhada = data.get("ementaDetalhada", None)
+        self.keywords = data.get("keywords", '').split(',')
+        self.uri_prop_principal = data.get("uriPropPrincipal", None)
+        self.uri_prop_anterior = data.get("uriPropAnterior", None)
+        self.uri_prop_posterior = data.get("uriPropPosterior", None)
+        self.url_inteiro_teor = data.get("urlInteiroTeor", None)
+        self.urn_final = data.get("urnFinal", None)
+        self.texto = data.get("texto", None)
+        self.justificativa = data.get("justificativa", None)
 
     def __str__(self):
         return '{} {}/{}'.format(self.sigla_tipo, self.numero, self.ano)
@@ -395,18 +445,18 @@ class Votacao(Model):
 
     def __init__(self, data):
         super().__init__(data)
-        self.id = self.data['id']
-        self.aprovacao = self.data['aprovacao']
-        self.data = self.get_date(self.data['data'], DATE_FORMAT)
-        self.data_hora_registro = self.get_data(self.data['dataHoraRegistro'])
-        self.descricao = self.data['descricao']
-        self.id = self.data['id']
-        self.proposicao_objeto = self.data['proposicaoObjeto']
-        self.sigla_orgao = self.data['siglaOrgao']
-        self.uri = self.data['uri']
-        self.uri_evento = self.data['uriEvento']
-        self.uriOrgao = self.data['uriOrgao']
-        self.uri_proposicao_object = self.data['uriProposicaoObjeto']
+        self.id = data['id']
+        self.aprovacao = data['aprovacao']
+        self.data = self.get_date(data['data'], DATE_FORMAT)
+        self.data_hora_registro = self.get_data(data['dataHoraRegistro'])
+        self.descricao = data['descricao']
+        self.id = data['id']
+        self.proposicao_objeto = data['proposicaoObjeto']
+        self.sigla_orgao = data['siglaOrgao']
+        self.uri = data['uri']
+        self.uri_evento = data['uriEvento']
+        self.uriOrgao = data['uriOrgao']
+        self.uri_proposicao_object = data['uriProposicaoObjeto']
 
     def __str__(self):
         return self.descricao
