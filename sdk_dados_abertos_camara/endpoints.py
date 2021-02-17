@@ -18,8 +18,15 @@ def _get_extra_args(all_args, exclude=[]):
     return extra_params
 
 
-def get_blocos(id=None, id_legislatura=None, params=DEFAULT_PARAMS):
+def _get_params(params):
+    updated_params = DEFAULT_PARAMS
+    updated_params.update(params)
+    return updated_params
+
+
+def get_blocos(id=None, id_legislatura=None, params={}):
     extra_params = _get_extra_args(locals())
+    params = _get_params(params)
 
     res = api.get('/blocos', extra_params=extra_params, **params)
     if params['data_only']:
@@ -48,8 +55,9 @@ def get_deputados(id=None,
                   sigla_sexo=None,
                   data_inicio=None,
                   data_fim=None,
-                  params=DEFAULT_PARAMS):
+                  params={}):
     extra_params = _get_extra_args(locals())
+    params = _get_params(params)
 
     res = api.get('/deputados', extra_params, **params)
     if params['data_only']:
@@ -73,9 +81,10 @@ def get_deputado_despesas(id,
                           ano=None,
                           mes=None,
                           cnpj_cpf_fornecedor=None,
-                          params=DEFAULT_PARAMS):
+                          params={}):
 
     extra_params = _get_extra_args(locals(), ['id'])
+    params = _get_params(params)
     res = api.get('/deputados/{}/despesas'.format(id), extra_params, **params)
 
     if params['data_only']:
