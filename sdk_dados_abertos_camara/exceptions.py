@@ -5,8 +5,8 @@ class CamaraAPIException(Exception):
 
     def __init__(self, status, endpoint='/'):
         self.message = 'API Dados Abertos da Camara returned an error: '\
-            '[{}] on endpoint [{}]'.format(status, endpoint)
-        super().__init__()
+            '{} on endpoint {}'.format(status, endpoint)
+        super().__init__(self.message)
 
 
 class CamaraAPIInvalidID(Exception):
@@ -17,4 +17,4 @@ class CamaraAPIInvalidID(Exception):
     def __init__(self, endpoint):
         self.message = 'API Dados Abertos da Camara'\
             'invalid ID for: [{}]'.format(endpoint)
-        super().__init__()
+        super().__init__(self.message)
