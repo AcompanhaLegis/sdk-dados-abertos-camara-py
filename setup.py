@@ -5,7 +5,7 @@ with open('README.md', 'r') as readme:
 
 setuptools.setup(
     name='sdk-dados-abertos-camara',
-    version='0.0.7',
+    version='0.0.8',
     author='AcompanhaLegis',
     description='SDK to use Dados Abertos da Camara dos Deputados',
     long_description=long_description,
