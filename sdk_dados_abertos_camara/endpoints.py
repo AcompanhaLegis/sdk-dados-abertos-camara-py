@@ -1,5 +1,5 @@
 from sdk_dados_abertos_camara import api, exceptions
-from sdk_dados_abertos_camara.models import Bloco, Deputado, DespesaDeputado
+from sdk_dados_abertos_camara.models import Bloco, Deputado, DespesaDeputado, DiscursoDeputado
 from sdk_dados_abertos_camara.utils import to_camelcase
 
 
@@ -89,5 +89,21 @@ def get_deputado_despesas(id,
 
     if params['data_only']:
         return [DespesaDeputado(d) for d in res]
+
+    return res
+
+
+def get_deputado_discursos(id,
+                           id_legislatura=None,
+                           data_inicio=None,
+                           data_fim=None,
+                           params={}):
+
+    extra_params = _get_extra_args(locals(), ['id'])
+    params = _get_params(params)
+    res = api.get('/deputados/{}/discursos'.format(id), extra_params, **params)
+
+    if params['data_only']:
+        return [DiscursoDeputado(d) for d in res]
 
     return res
